@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>新聞搜尋</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body style="height:100%">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row h-100 align-items-center text-center">
+                <div class="col-xl">
+                    <h1>新聞搜尋</h1>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row align-items-center text-center">
+                <div class="col-xl">
+                    <input id="searchtext" type="text" style="width:90%">
+                </div>
+                <div>
+                    <input id="givesearch" type="submit" value="搜尋" onclick="senddata()">
+                </div>
+            </div>
+        </div>
+        
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="elasticsearch-js/elasticsearch.min.js"></script>
+    </body>
+    <script>
+        function senddata() {
+            var thekeystr = $("#searchtext").val();
+            //var elasticsearch = require('elasticsearch');
+var client = new elasticsearch.Client({
+  host: 'localhost:9200',
+  log: 'trace'
+});
+//client.apis[config.apiVersion].ping.spec.requestTimeout = customDefaultMs;
+client.search({
+  index: 'news',
+  type: 'document',
+  body: {
+    query: {
+      match: {
+        "content": 'elasticsearch'
+      }
+    }
+  }
+}).then(function (resp) {
+    var hits = resp.hits.hits;
+}, function (err) {
+    console.trace(err.message);
+});
+/*$.getJSON( "localhost:9200/news/_search?pretty", {
+    "query": { "match": { "content": "mill" } }
+} ,function( data ) {
+  var items = [];
+  $.each( data, function( key, val ) {
+    items.push( "<li id='" + key + "'>" + val + "</li>" );
+  });
+ 
+  $( "<ul/>", {
+    "class": "my-new-list",
+    html: items.join( "" )
+  }).appendTo( "body" );
+});
+*/
+
+        } 
+    </script>
+</html>
